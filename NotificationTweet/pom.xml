@@ -23,6 +23,11 @@
       <groupId>de.akquinet.android.androlog</groupId>
       <artifactId>androlog</artifactId>
     </dependency>
+		<dependency>
+			<groupId>org.twitter4j</groupId>
+			<artifactId>twitter4j-core</artifactId>
+			<version>[2.2,)</version>
+		</dependency>
   </dependencies>
   <build>
     <plugins>
@@ -86,4 +91,18 @@
     	</plugins>
     </pluginManagement>
   </build>
+  
+  	<repositories>
+		<repository>
+			<id>twitter4j.org</id>
+			<name>twitter4j.org Repository</name>
+			<url>http://twitter4j.org/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 </project>
