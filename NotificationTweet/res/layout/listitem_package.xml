@@ -31,11 +31,17 @@
 	<TextView android:layout_toRightOf="@+id/ImageView_packageIcon"
 		android:layout_alignWithParentIfMissing="true" android:layout_width="fill_parent"
 		android:layout_height="wrap_content" android:gravity="center_vertical" android:id="@+id/TextView_packageName" android:layout_toLeftOf="@+id/CheckBox_packageFlag"></TextView>
-	<TextView android:layout_width="fill_parent"
-		android:layout_height="26dip" android:layout_toRightOf="@+id/ImageView_packageIcon"
-		android:layout_alignParentBottom="true"
-		android:layout_alignWithParentIfMissing="true" 
-		android:singleLine="true"
-		android:ellipsize="marquee" android:id="@+id/TextView_packageDescription" android:layout_toLeftOf="@id/CheckBox_packageFlag"/>
+
+	<TextView
+	    android:id="@+id/TextView_appName"
+	    android:layout_width="fill_parent"
+	    android:layout_height="26dip"
+	    android:layout_alignParentBottom="true"
+	    android:layout_alignWithParentIfMissing="true"
+	    android:layout_toLeftOf="@id/CheckBox_packageFlag"
+	    android:layout_toRightOf="@+id/ImageView_packageIcon"
+	    android:ellipsize="marquee"
+	    android:singleLine="true" />
+
 	<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_alignParentRight="true" android:focusable="false" android:clickable="false" android:id="@+id/CheckBox_packageFlag"></CheckBox>
 </RelativeLayout>

@@ -8,6 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -73,12 +76,23 @@ public class MainActivity extends Activity {
     @Override
 	protected void onResume() {
 		super.onResume();
+		PackageManager pm = getPackageManager(); 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         for(String key : pref.getAll().keySet()){
         	if(key.startsWith("FLAG-")){
         		String packageName = key.substring(5);
         		boolean flag = pref.getBoolean(key, false);
-        		PackageData data = new PackageData(flag, packageName);
+        		Drawable icon = null;
+        		String appName = "";
+        		try {
+					icon = pm.getApplicationIcon(packageName);
+					ApplicationInfo info = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+					if(info != null){
+						appName = pm.getApplicationLabel(info).toString();
+					}
+				} catch (NameNotFoundException e) {
+				}
+        		PackageData data = new PackageData(flag, packageName, icon, appName);
         		mPackages.add(data);
         	}
         }
@@ -115,15 +129,15 @@ public class MainActivity extends Activity {
 	private class PackageData {
     	private boolean mFlag;
     	private final String mPackageName;
-    	private String mDescription;
+    	private String mAppName;
     	private final Drawable mIcon;
     	
-		public PackageData(boolean mFlag, String mPackageName) {
+		public PackageData(boolean mFlag, String mPackageName, Drawable icon, String appName) {
 			super();
 			this.mFlag = mFlag;
 			this.mPackageName = mPackageName;
-			this.mDescription = "";
-			this.mIcon = null;
+			this.mIcon = icon;
+			this.mAppName = appName;
 		}
 
 		private boolean getFlag() {
@@ -135,8 +149,8 @@ public class MainActivity extends Activity {
 		private String getPackageName() {
 			return mPackageName;
 		}
-		private String getDescription() {
-			return mDescription;
+		private String getAppName() {
+			return mAppName;
 		}
 		private Drawable getIcon() {
 			return mIcon;
@@ -157,14 +171,14 @@ public class MainActivity extends Activity {
 				convertView = layoutInflater.inflate(R.layout.listitem_package, parent, false);
 			}
 			TextView packageName = (TextView) convertView.findViewById(R.id.TextView_packageName);
-			TextView packageDescription = (TextView) convertView.findViewById(R.id.TextView_packageDescription);
+			TextView appName = (TextView) convertView.findViewById(R.id.TextView_appName);
 			ImageView packageIcon = (ImageView) convertView.findViewById(R.id.ImageView_packageIcon);
 			CheckBox packageFlag = (CheckBox) convertView.findViewById(R.id.CheckBox_packageFlag);
 
 			// Populate template
 			PackageData data = getItem(position);
 			packageName.setText(data.getPackageName());
-			packageDescription.setText(data.getDescription());
+			appName.setText(data.getAppName());
 			Drawable icon = data.getIcon();
 			if (icon == null) {
 				icon = getResources().getDrawable(android.R.drawable.ic_menu_search);
