@@ -16,6 +16,9 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -29,6 +32,7 @@ public class NotificationSender {
 
 	private final Context mContext;
 	private final TwitterFactory mFactory;
+	private final PackageManager mPackageManger;
 	private Twitter mTwitter = null;
 
 	static TwitterFactory createTwitterFactory(Context context) {
@@ -43,6 +47,7 @@ public class NotificationSender {
 	public NotificationSender(Context context){
 		mContext = context;
 		mFactory = createTwitterFactory(context);
+		mPackageManger = mContext.getPackageManager();
 
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		String oauthToken = pref.getString(PREF_TWITTER_OAUTH_TOKEN, "");
@@ -115,8 +120,17 @@ public class NotificationSender {
 		if(mTwitter == null){
 			return;
 		}
+		String appName = packageName;
+		try {
+			ApplicationInfo info = mPackageManger.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+			if(info != null){
+				appName = mPackageManger.getApplicationLabel(info).toString();
+			}
+		} catch (NameNotFoundException e) {
+		}
+		
 		StringBuffer buf = new StringBuffer();
-		buf.append(packageName);
+		buf.append(appName);
 		buf.append(" : ");
 		if(texts.size() > 0){
 			buf.append(texts.get(0));

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="org.hogeika.android.app.NotificationTweet" android:versionCode="2" android:versionName="0.0.1-SNAPSHOT">
+  package="org.hogeika.android.app.NotificationTweet" android:versionCode="3" android:versionName="0.0.3-SNAPSHOT">
 <uses-permission android:name="android.permission.INTERNET"/>
 <uses-sdk android:targetSdkVersion="7" android:minSdkVersion="7"/>
 <uses-feature android:required="false" android:name="android.hardware.touchscreen"/>
