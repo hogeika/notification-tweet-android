@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512"
+   height="512"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.2 r9819"
+   sodipodi:docname="notificationtweet_logo.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="-32.250217"
+     inkscape:cy="254.6744"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="true"
+     inkscape:snap-global="true"
+     inkscape:window-width="1852"
+     inkscape:window-height="1178"
+     inkscape:window-x="60"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1">
+    <inkscape:grid
+       type="xygrid"
+       id="grid3001"
+       empspacing="5"
+       visible="true"
+       enabled="true"
+       snapvisiblegridlinesonly="true" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-540.36218)">
+    <rect
+       style="fill:#00ff00"
+       id="rect3009"
+       width="261.42856"
+       height="171.42857"
+       x="298.57144"
+       y="372"
+       transform="translate(0,540.36218)" />
+    <g
+       id="g3024"
+       transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,764.92933,226.01149)">
+      <g
+         id="g3017" />
+    </g>
+    <path
+       style="fill:#00ffff"
+       d="M 58.40625 32 C 37.132649 32 20 49.13265 20 70.40625 L 20 213.59375 C 20 234.86735 37.132649 252 58.40625 252 L 401.59375 252 C 422.86735 252 440 234.86735 440 213.59375 L 440 70.40625 C 440 49.13265 422.86735 32 401.59375 32 L 58.40625 32 z "
+       id="rect3031"
+       transform="translate(0,540.36218)" />
+    <rect
+       style="fill:#00ff00"
+       id="rect3033"
+       width="180"
+       height="60"
+       x="762.12231"
+       y="433.00546"
+       transform="matrix(0.70710678,0.70710678,-0.70710678,0.70710678,0,0)"
+       rx="30" />
+    <rect
+       style="fill:#ffffff"
+       width="40"
+       height="160"
+       x="182.75209"
+       y="592.2674"
+       rx="20" />
+    <rect
+       style="fill:#ffffff"
+       width="79.999992"
+       height="39.999973"
+       x="202.75209"
+       y="732.2674"
+       rx="20" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#ffffff"
+       sodipodi:cx="-480"
+       sodipodi:cy="212"
+       sodipodi:rx="40"
+       sodipodi:ry="40"
+       d="m -440,212 a 40,40 0 1 1 -42.75208,-39.90521 L -480,212 z"
+       transform="translate(702.75208,520.26739)"
+       sodipodi:start="0"
+       sodipodi:end="4.6435325" />
+    <rect
+       style="fill:#ffffff"
+       width="79.999992"
+       height="39.999973"
+       x="202.75209"
+       y="652.2674"
+       rx="20" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#00ffff"
+       id="path3101"
+       sodipodi:cx="160"
+       sodipodi:cy="292"
+       sodipodi:rx="40"
+       sodipodi:ry="20"
+       d="m 200,292 a 40,20 0 1 1 -80,0 40,20 0 1 1 80,0 z"
+       transform="translate(0,540.36218)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#00ffff"
+       id="path3103"
+       sodipodi:cx="180"
+       sodipodi:cy="342"
+       sodipodi:rx="20"
+       sodipodi:ry="10"
+       d="m 200,342 a 20,10 0 1 1 -40,0 20,10 0 1 1 40,0 z"
+       transform="translate(0,540.36218)" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#00ff00"
+       id="path3005"
+       sodipodi:cx="320"
+       sodipodi:cy="252"
+       sodipodi:rx="100"
+       sodipodi:ry="100"
+       d="m 220,252 a 100,100 0 0 1 200,0"
+       transform="matrix(1.3214286,0,0,1.1142857,9.2857141,611.56218)"
+       sodipodi:start="3.1415927"
+       sodipodi:end="6.2831853"
+       sodipodi:open="true" />
+  </g>
+</svg>
