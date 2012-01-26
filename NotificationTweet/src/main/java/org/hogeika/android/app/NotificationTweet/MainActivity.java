@@ -79,7 +79,7 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		PackageManager pm = getPackageManager(); 
-		List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_ACTIVITIES|PackageManager.GET_PROVIDERS|PackageManager.GET_RECEIVERS|PackageManager.GET_SERVICES);
+		List<PackageInfo> packages = pm.getInstalledPackages(0);
 		for(PackageInfo pinfo : packages){
 			String packageName = pinfo.packageName;
     		Drawable icon = null;
