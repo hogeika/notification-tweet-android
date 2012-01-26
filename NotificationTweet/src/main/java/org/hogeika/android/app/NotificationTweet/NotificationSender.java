@@ -1,5 +1,6 @@
 package org.hogeika.android.app.NotificationTweet;
 
+import java.text.DateFormat;
 import java.util.List;
 
 import twitter4j.Twitter;
@@ -22,6 +23,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 public class NotificationSender {
@@ -121,6 +123,11 @@ public class NotificationSender {
 		}
 		return mScreenName;
 	}
+	
+	private String formatTime(long when){
+		return DateUtils.formatSameDayTime(when, System.currentTimeMillis(), DateFormat.SHORT, DateFormat.SHORT).toString();
+	}
+
 
 	public void sendNotification(Notification notification, String packageName, List<CharSequence> texts) {
 		if(mTwitter == null){
@@ -137,7 +144,9 @@ public class NotificationSender {
 		
 		final StringBuffer buf = new StringBuffer();
 		buf.append(appName);
-		buf.append(" : ");
+		buf.append('[');
+		buf.append(formatTime(notification.when));
+		buf.append("]: ");
 		if(texts.size() > 0){
 			buf.append(texts.get(0));
 		}
