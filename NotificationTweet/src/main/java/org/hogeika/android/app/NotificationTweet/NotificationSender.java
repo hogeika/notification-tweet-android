@@ -20,6 +20,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -134,15 +135,25 @@ public class NotificationSender {
 		} catch (NameNotFoundException e) {
 		}
 		
-		StringBuffer buf = new StringBuffer();
+		final StringBuffer buf = new StringBuffer();
 		buf.append(appName);
 		buf.append(" : ");
 		if(texts.size() > 0){
 			buf.append(texts.get(0));
 		}
+		new AsyncTask<Void, Void, Void>() {
+			@Override
+			protected Void doInBackground(Void... params) {
+				updateStatus(buf.toString());
+				return null;
+			}
+		}.execute((Void[])null);
+	}
+
+	private synchronized void updateStatus(String buf) {
 		try {
 			Log.d("NotificationSender", "Send : " + buf.toString());
-			mTwitter.updateStatus(buf.toString());
+			mTwitter.updateStatus(buf);
 		} catch (TwitterException e) {
 			e.printStackTrace();
 		}
