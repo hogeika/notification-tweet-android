@@ -146,6 +146,11 @@ public class MainActivity extends Activity {
 			mApplication.getNotificationSender().logout(this);
 			return true;
 
+		case R.id.menu_accessiblity:
+			Intent intent = new Intent(Intent.ACTION_MAIN);
+			intent.setClassName("com.android.settings", "com.android.settings.AccessibilitySettings");
+			startActivity(intent);
+			return true;
 		default:
 			return super.onMenuItemSelected(featureId, item);
 		}

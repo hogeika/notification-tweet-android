@@ -17,5 +17,6 @@
         android:id="@+id/menu_logout"
         android:title="Logout">
     </item>
+    <item android:id="@+id/menu_accessiblity" android:title="Accessibility"></item>
 
 </menu>
