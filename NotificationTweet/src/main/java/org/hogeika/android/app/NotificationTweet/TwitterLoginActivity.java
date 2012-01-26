@@ -21,6 +21,7 @@ import android.webkit.WebViewClient;
 public class TwitterLoginActivity extends Activity {
 	public static final String RESULT_OAUTH_TOKEN = "oauth_token";
 	public static final String RESULT_OAUTH_TOKEN_SECRET = "oauth_token_secret";
+	public static final String RESULT_SCREEN_NAME = "screen_name";
 	public static final String CALLBACK_URL = "myapp://oauth";
 	
 	private static final int DIALOG_PROGRESS = 1;
@@ -31,6 +32,7 @@ public class TwitterLoginActivity extends Activity {
 		setTitle("Twitter Login");
 
 		setContentView(R.layout.twitter_login);
+		final WebView webView = (WebView) findViewById(R.id.WebView_twitter_login);
 		new Handler().post(new Runnable() {
 			@Override
 			public void run() {
@@ -52,11 +54,11 @@ public class TwitterLoginActivity extends Activity {
 					safeDismissDialog(DIALOG_PROGRESS);
 				}
 				
-				final WebView webView = (WebView) findViewById(R.id.WebView_twitter_login);
 				CookieManager cm = CookieManager.getInstance();
 				cm.removeAllCookie();
 				WebSettings webSettings = webView.getSettings();
 				webSettings.setJavaScriptEnabled(true);
+
 				webView.setWebViewClient(new WebViewClient(){
 
 					@Override
@@ -96,6 +98,7 @@ public class TwitterLoginActivity extends Activity {
 								Intent result = new Intent();
 								result.putExtra(RESULT_OAUTH_TOKEN, accessToken.getToken());
 								result.putExtra(RESULT_OAUTH_TOKEN_SECRET, accessToken.getTokenSecret());
+								result.putExtra(RESULT_SCREEN_NAME, loginAccount);
 								setResult(RESULT_OK, result);
 							} catch (TwitterException e) {
 								e.printStackTrace();
@@ -109,6 +112,7 @@ public class TwitterLoginActivity extends Activity {
 				webView.loadUrl(authUrl);
 			}
 		});
+		webView.loadUrl("about:blank");
 	}
 	
 	@Override

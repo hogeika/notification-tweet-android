@@ -9,22 +9,26 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import de.akquinet.android.androlog.Log;
 
@@ -32,6 +36,7 @@ public class MainActivity extends Activity {
 	private MyApplication mApplication;
 	private ArrayList<PackageData> mPackages;
 	private PackageAdapter mAdapter;
+	private boolean mEnableFilter = false;
 	
     /**
      * Called when the activity is first created.
@@ -53,20 +58,17 @@ public class MainActivity extends Activity {
         
         mApplication = (MyApplication)getApplication();
         mPackages = new ArrayList<PackageData>();
-        ListView listView = (ListView) findViewById(R.id.ListView_packages);
+
+		ListView listView = (ListView) findViewById(R.id.ListView_packages);
 		mAdapter = new PackageAdapter(this, mPackages);
 		listView.setAdapter(mAdapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+				SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mApplication);
 				PackageData selected = mPackages.get(position);
-				if(selected.getFlag()){
-					selected.setFlag(false);
-				}else{
-					selected.setFlag(true);
-				}
-				SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+				boolean flag = pref.getBoolean("FLAG-" + selected.getPackageName(), false);
 				Editor editor = pref.edit();
-				editor.putBoolean("FLAG-" + selected.getPackageName(), selected.getFlag());
+				editor.putBoolean("FLAG-" + selected.getPackageName(), !flag);
 				editor.commit();
 				mAdapter.notifyDataSetChanged();
 			}
@@ -77,49 +79,79 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		PackageManager pm = getPackageManager(); 
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        for(String key : pref.getAll().keySet()){
-        	if(key.startsWith("FLAG-")){
-        		String packageName = key.substring(5);
-        		boolean flag = pref.getBoolean(key, false);
-        		Drawable icon = null;
-        		String appName = "";
-        		try {
-					icon = pm.getApplicationIcon(packageName);
-					ApplicationInfo info = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
-					if(info != null){
-						appName = pm.getApplicationLabel(info).toString();
-					}
-				} catch (NameNotFoundException e) {
+		List<PackageInfo> packages = pm.getInstalledPackages(PackageManager.GET_ACTIVITIES|PackageManager.GET_PROVIDERS|PackageManager.GET_RECEIVERS|PackageManager.GET_SERVICES);
+		for(PackageInfo pinfo : packages){
+			String packageName = pinfo.packageName;
+    		Drawable icon = null;
+    		String appName = "";
+    		try {
+				icon = pm.getApplicationIcon(packageName);
+				ApplicationInfo info = pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+				if(info != null){
+					appName = pm.getApplicationLabel(info).toString();
 				}
-        		PackageData data = new PackageData(flag, packageName, icon, appName);
-        		mPackages.add(data);
-        	}
-        }
-        Button login = (Button) findViewById(R.id.Button_login);
-        login.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mApplication.getNotificationSender().login(MainActivity.this);
+			} catch (NameNotFoundException e) {
 			}
-		});
-        Button logout = (Button) findViewById(R.id.Button_logout);
-        logout.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mApplication.getNotificationSender().logout(MainActivity.this);
-			}
-		});
-        String loginName = mApplication.getNotificationSender().getLoginName();
-        logout.setText("Logout(" + loginName + ")");
-        if(loginName == null){
-        	login.setVisibility(View.VISIBLE);
-        	logout.setVisibility(View.GONE);
-        }else{
-        	login.setVisibility(View.GONE);
-        	logout.setVisibility(View.VISIBLE);
-        }
+    		PackageData data = new PackageData(packageName, icon, appName);
+    		mPackages.add(data);
+		}
 	}
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		if(mEnableFilter){
+			menu.findItem(R.id.menu_filter).setVisible(false);
+			menu.findItem(R.id.menu_all).setVisible(true);			
+		}else {
+			menu.findItem(R.id.menu_filter).setVisible(true);
+			menu.findItem(R.id.menu_all).setVisible(false);			
+		}
+		
+        String loginName = mApplication.getNotificationSender().getLoginName();
+        if(loginName != null){
+        	menu.findItem(R.id.menu_login).setVisible(false);
+        	menu.findItem(R.id.menu_logout).setVisible(true);
+        }else{
+        	menu.findItem(R.id.menu_login).setVisible(true);
+        	menu.findItem(R.id.menu_logout).setVisible(false);
+        }
+		return super.onPrepareOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_filter:
+			mEnableFilter = true;
+			mAdapter.notifyDataSetInvalidated();
+			return true;
+			
+		case R.id.menu_all:
+			mEnableFilter = false;
+			mAdapter.notifyDataSetInvalidated();
+			return true;
+			
+		case R.id.menu_login:
+			mApplication.getNotificationSender().login(this);
+			return true;
+
+		case R.id.menu_logout:
+			mApplication.getNotificationSender().logout(this);
+			return true;
+
+		default:
+			return super.onMenuItemSelected(featureId, item);
+		}
+		
+	}
+
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -127,24 +159,15 @@ public class MainActivity extends Activity {
 	}
 	
 	private class PackageData {
-    	private boolean mFlag;
     	private final String mPackageName;
     	private String mAppName;
     	private final Drawable mIcon;
     	
-		public PackageData(boolean mFlag, String mPackageName, Drawable icon, String appName) {
+		public PackageData(String mPackageName, Drawable icon, String appName) {
 			super();
-			this.mFlag = mFlag;
 			this.mPackageName = mPackageName;
 			this.mIcon = icon;
 			this.mAppName = appName;
-		}
-
-		private boolean getFlag() {
-			return mFlag;
-		}
-		private void setFlag(boolean flag) {
-			this.mFlag = flag;
 		}
 		private String getPackageName() {
 			return mPackageName;
@@ -168,14 +191,14 @@ public class MainActivity extends Activity {
 			// Inflate a view template
 			if (convertView == null) {
 				LayoutInflater layoutInflater = getLayoutInflater();
-				convertView = layoutInflater.inflate(R.layout.listitem_package, parent, false);
+				convertView = layoutInflater.inflate(R.layout.listitem_package, null);
 			}
+			View itemContainer = (View) convertView.findViewById(R.id.Layout_contaienr);
 			TextView packageName = (TextView) convertView.findViewById(R.id.TextView_packageName);
 			TextView appName = (TextView) convertView.findViewById(R.id.TextView_appName);
 			ImageView packageIcon = (ImageView) convertView.findViewById(R.id.ImageView_packageIcon);
 			CheckBox packageFlag = (CheckBox) convertView.findViewById(R.id.CheckBox_packageFlag);
 
-			// Populate template
 			PackageData data = getItem(position);
 			packageName.setText(data.getPackageName());
 			appName.setText(data.getAppName());
@@ -184,8 +207,20 @@ public class MainActivity extends Activity {
 				icon = getResources().getDrawable(android.R.drawable.ic_menu_search);
 			}
 			packageIcon.setImageDrawable(icon);
-			packageFlag.setChecked(data.getFlag());
 
+			SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mApplication);
+			packageFlag.setChecked(pref.getBoolean("FLAG-" + data.getPackageName(), false));
+			if(pref.contains("HINT-" + data.getPackageName())){
+				convertView.setBackgroundColor(Color.BLUE);
+				itemContainer.setVisibility(View.VISIBLE);
+			}else{
+				convertView.setBackgroundColor(android.R.color.background_dark);
+				if(mEnableFilter){
+					itemContainer.setVisibility(View.GONE);
+				} else {
+					itemContainer.setVisibility(View.VISIBLE);
+				}
+			}
 			return convertView;
 		}
     	

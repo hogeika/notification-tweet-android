@@ -32,7 +32,8 @@ public class NotificationMonitorService extends AccessibilityService {
         info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
         info.notificationTimeout = NOTIFICATION_TIMEOUT_MILLIS;
         info.flags = AccessibilityServiceInfo.DEFAULT;
-        setServiceInfo(info);	}
+        setServiceInfo(info);
+	}
 
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent event) {
@@ -51,24 +52,22 @@ public class NotificationMonitorService extends AccessibilityService {
         	
         	String packageNmae = event.getPackageName().toString();
         	SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        	String key = "FLAG-" + packageNmae;
-			if(pref.contains(key)){
-        		boolean flag = pref.getBoolean(key, false);
-        		if(flag){
-        			StringBuffer buf = new StringBuffer();
-                	List<CharSequence> texts = event.getText();
-                	for(int i = 0; i < texts.size(); i++){
-                		buf.append(texts.get(i));
-                		buf.append('\n');
-                		Log.d(LOG_TAG, "text(" + i + ") : " + texts.get(i));
-                	}
-                	mApplication.getNotificationSender().sendNotification((Notification) event.getParcelableData(), packageNmae, texts);
-       		}
-        	}else{
-        		Editor editor = pref.edit();
-        		editor.putBoolean(key, false);
+			if(!pref.contains("HINT-" + packageNmae)){
+	       		Editor editor = pref.edit();
+        		editor.putBoolean("HINT-" + packageNmae, true);
         		editor.commit();
-        	}
+ 			}
+        	boolean flag = pref.getBoolean("FLAG-" + packageNmae, false);
+			if(flag){
+				StringBuffer buf = new StringBuffer();
+				List<CharSequence> texts = event.getText();
+				for(int i = 0; i < texts.size(); i++){
+					buf.append(texts.get(i));
+					buf.append('\n');
+					Log.d(LOG_TAG, "text(" + i + ") : " + texts.get(i));
+				}
+				mApplication.getNotificationSender().sendNotification((Notification) event.getParcelableData(), packageNmae, texts);
+			}
         	break;
         default :
             Log.w(LOG_TAG, "Unknown accessibility event type " + eventType);        	

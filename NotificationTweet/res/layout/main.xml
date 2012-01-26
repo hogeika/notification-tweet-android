@@ -1,34 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
+    android:orientation="vertical" >
 
     <ListView
         android:id="@+id/ListView_packages"
         android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1.0" >
-	</ListView>
+        android:layout_height="fill_parent"
+        android:layout_weight="1.0"
+        android:dividerHeight="0dp" >
+    </ListView>
 
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
-
-        <Button
-            android:id="@+id/Button_login"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Login Twitter" />
-
-        <Button
-            android:id="@+id/Button_logout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:visibility="gone" />
-
     </LinearLayout>
+
 </LinearLayout>

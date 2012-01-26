@@ -26,6 +26,7 @@ import android.util.Log;
 public class NotificationSender {
 	public static final String PREF_TWITTER_OAUTH_TOKEN = "twitter_oauth_token";
 	public static final String PREF_TWITTER_OAUTH_TOEKN_SECRET = "twitter_oauth_token_secret";
+	public static final String PREF_TWITTER_SCREEN_NAME = "screen_name";
 
 	private static final int REQUEST_LOGIN_TWITTER = 1;
 	private int mRequestCodeLogin = REQUEST_LOGIN_TWITTER;
@@ -34,6 +35,7 @@ public class NotificationSender {
 	private final TwitterFactory mFactory;
 	private final PackageManager mPackageManger;
 	private Twitter mTwitter = null;
+	private String mScreenName = null;
 
 	static TwitterFactory createTwitterFactory(Context context) {
 		Resources res = context.getResources();
@@ -55,6 +57,7 @@ public class NotificationSender {
 		if(oauthToken.length() > 0 && oauthTokenSecret.length()>0){
 			AccessToken accessToken = new AccessToken(oauthToken, oauthTokenSecret);
 			mTwitter = mFactory.getInstance(accessToken);
+			mScreenName = pref.getString(PREF_TWITTER_SCREEN_NAME, "");
 		}
 	}
 	
@@ -71,30 +74,37 @@ public class NotificationSender {
 		if(requestCode == mRequestCodeLogin && resultCode == Activity.RESULT_OK){
 			String oauthToken = data.getStringExtra(TwitterLoginActivity.RESULT_OAUTH_TOKEN);
 			String oauthTokenSecret = data.getStringExtra(TwitterLoginActivity.RESULT_OAUTH_TOKEN_SECRET);
+			String screenName = data.getStringExtra(TwitterLoginActivity.RESULT_SCREEN_NAME);
 
 			if(oauthToken.length()>0 && oauthTokenSecret.length()>0){
 				SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
 				Editor editor = pref.edit();
 				editor.putString(PREF_TWITTER_OAUTH_TOKEN, oauthToken);
 				editor.putString(PREF_TWITTER_OAUTH_TOEKN_SECRET, oauthTokenSecret);
+				editor.putString(PREF_TWITTER_SCREEN_NAME, screenName);
 				editor.commit();
 
 				AccessToken accessToken = new AccessToken(oauthToken, oauthTokenSecret);
 				mTwitter = mFactory.getInstance(accessToken);
+				mScreenName = screenName;
 			}	
 		}
 	}
 	
 	public void logout(Activity activity) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-		builder.setPositiveButton("Logout", new OnClickListener() {		
+		builder.setTitle("Logout");
+		builder.setMessage("Logout from @" + getLoginName());
+		builder.setPositiveButton("OK", new OnClickListener() {		
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				mTwitter = null;
+				mScreenName = null;
 				SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(mContext);
 				Editor editor = pref.edit();
 				editor.remove(PREF_TWITTER_OAUTH_TOKEN);
 				editor.remove(PREF_TWITTER_OAUTH_TOEKN_SECRET);
+				editor.remove(PREF_TWITTER_SCREEN_NAME);
 				editor.commit();
 			}
 		});
@@ -108,12 +118,7 @@ public class NotificationSender {
 		if(mTwitter == null){
 			return null;
 		}
-		try {
-			return mTwitter.getScreenName();
-		} catch (IllegalStateException e) {
-		} catch (TwitterException e) {
-		}
-		return null;
+		return mScreenName;
 	}
 
 	public void sendNotification(Notification notification, String packageName, List<CharSequence> texts) {

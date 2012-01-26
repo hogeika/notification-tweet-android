@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2009 The Android Open Source Project
+<!--
+     Copyright (C) 2009 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -13,35 +14,60 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent" android:layout_height="fill_parent"
-	android:padding="6dip">
+    <RelativeLayout
+        android:id="@+id/Layout_contaienr"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="6dip" >
 
-	<ImageView
-	    android:id="@+id/ImageView_packageIcon"
-	    android:layout_width="wrap_content"
-	    android:layout_height="fill_parent"
-	    android:layout_alignParentBottom="true"
-	    android:layout_alignParentTop="true"
-	    android:layout_centerVertical="true"
-	    android:layout_marginRight="6dip"
-	    android:src="@drawable/icon" />
+        <ImageView
+            android:id="@+id/ImageView_packageIcon"
+            android:layout_width="48dip"
+            android:layout_height="48dip"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="6dip"
+            android:src="@drawable/icon" />
 
-	<TextView android:layout_toRightOf="@+id/ImageView_packageIcon"
-		android:layout_alignWithParentIfMissing="true" android:layout_width="fill_parent"
-		android:layout_height="wrap_content" android:gravity="center_vertical" android:id="@+id/TextView_packageName" android:layout_toLeftOf="@+id/CheckBox_packageFlag"></TextView>
+        <TextView
+            android:id="@+id/TextView_packageName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toLeftOf="@+id/CheckBox_packageFlag"
+            android:layout_toRightOf="@+id/ImageView_packageIcon"
+            android:ellipsize="marquee"
+            android:gravity="center_vertical"
+            android:singleLine="true" >
+        </TextView>
 
-	<TextView
-	    android:id="@+id/TextView_appName"
-	    android:layout_width="fill_parent"
-	    android:layout_height="26dip"
-	    android:layout_alignParentBottom="true"
-	    android:layout_alignWithParentIfMissing="true"
-	    android:layout_toLeftOf="@id/CheckBox_packageFlag"
-	    android:layout_toRightOf="@+id/ImageView_packageIcon"
-	    android:ellipsize="marquee"
-	    android:singleLine="true" />
+        <TextView
+            android:id="@+id/TextView_appName"
+            android:layout_width="fill_parent"
+            android:layout_height="26dip"
+            android:layout_alignParentBottom="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toLeftOf="@id/CheckBox_packageFlag"
+            android:layout_toRightOf="@+id/ImageView_packageIcon"
+            android:ellipsize="marquee"
+            android:singleLine="true" />
 
-	<CheckBox android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_alignParentRight="true" android:focusable="false" android:clickable="false" android:id="@+id/CheckBox_packageFlag"></CheckBox>
-</RelativeLayout>
+        <CheckBox
+            android:id="@+id/CheckBox_packageFlag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:clickable="false"
+            android:focusable="false" >
+        </CheckBox>
+    </RelativeLayout>
+
+</LinearLayout>
